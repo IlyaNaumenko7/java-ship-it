@@ -4,6 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import ru.yandex.practicum.delivery.ParcelBox;
+import ru.yandex.practicum.delivery.StandardParcel;
+import ru.yandex.practicum.delivery.FragileParcel;
+import ru.yandex.practicum.delivery.PerishableParcel;
+import ru.yandex.practicum.delivery.Parcel;
+
 public class DeliveryCostTest {
 
     private StandardParcel standard;
