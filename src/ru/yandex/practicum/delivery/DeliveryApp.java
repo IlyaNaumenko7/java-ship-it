@@ -7,12 +7,12 @@ import java.util.Scanner;
 public class DeliveryApp {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private static List<Parcel> allParcels = new ArrayList<>();
-    private static List<Trackable> trackableParcels = new ArrayList<>();
+    private static final List<Parcel> allParcels = new ArrayList<>();
+    private static final List<Trackable> trackableParcels = new ArrayList<>();
 
-    private static ParcelBox<StandardParcel> standardBox = new ParcelBox<>(100);
-    private static ParcelBox<FragileParcel> fragileBox = new ParcelBox<>(50);
-    private static ParcelBox<PerishableParcel> perishableBox = new ParcelBox<>(30);
+    private static final ParcelBox<StandardParcel> standardBox = new ParcelBox<>(100);
+    private static final ParcelBox<FragileParcel> fragileBox = new ParcelBox<>(50);
+    private static final ParcelBox<PerishableParcel> perishableBox = new ParcelBox<>(30);
 
     public static void main(String[] args) {
         boolean running = true;
@@ -70,31 +70,47 @@ public class DeliveryApp {
         System.out.print("День отправки: ");
         int sendDay = Integer.parseInt(scanner.nextLine());
 
-        Parcel parcel = null;
-
         switch (type) {
-            case 1:
-                parcel = new StandardParcel(description, weight, address, sendDay);
-                standardBox.addParcel((StandardParcel) parcel);
+            case 1: {
+                StandardParcel parcel = new StandardParcel(description, weight, address, sendDay);
+                if (standardBox.addParcel(parcel)) {
+                    allParcels.add(parcel);
+                    System.out.println("Посылка добавлена!");
+                } else {
+                    System.out.println("Превышен вес коробки!");
+                }
                 break;
-            case 2:
-                parcel = new FragileParcel(description, weight, address, sendDay);
-                fragileBox.addParcel((FragileParcel) parcel);
-                trackableParcels.add((Trackable) parcel);
+            }
+
+            case 2: {
+                FragileParcel parcel = new FragileParcel(description, weight, address, sendDay);
+                if (fragileBox.addParcel(parcel)) {
+                    allParcels.add(parcel);
+                    trackableParcels.add(parcel);
+                    System.out.println("Посылка добавлена!");
+                } else {
+                    System.out.println("Превышен вес коробки!");
+                }
                 break;
-            case 3:
+            }
+
+            case 3: {
                 System.out.print("Срок хранения (дней): ");
                 int ttl = Integer.parseInt(scanner.nextLine());
-                parcel = new PerishableParcel(description, weight, address, sendDay, ttl);
-                perishableBox.addParcel((PerishableParcel) parcel);
+                PerishableParcel parcel = new PerishableParcel(description, weight, address, sendDay, ttl);
+                if (perishableBox.addParcel(parcel)) {
+                    allParcels.add(parcel);
+                    System.out.println("Посылка добавлена!");
+                } else {
+                    System.out.println("Превышен вес коробки!");
+                }
                 break;
+            }
+
             default:
                 System.out.println("Неверный тип посылки");
                 return;
         }
-
-        allParcels.add(parcel);
-        System.out.println("Посылка добавлена!");
     }
 
     private static void sendParcels() {
